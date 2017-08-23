@@ -9,7 +9,7 @@ puts "Choice a type:"
 choices = Post.post_types
 choice = -1
 
-until choice > 0 && choice <= choice.size do
+until choice > 0 && choice <= choices.size do
   choices.each_with_index do |value, key|
     puts "\t#{key+1}. #{value}"
   end
