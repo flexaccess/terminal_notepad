@@ -16,4 +16,11 @@ class Memo < Post
     time_string = "\n\r========================\n\rCreated at: #{@created_at.strftime('%Y.%m.%d')}\n\r========================"
     return @text << time_string
   end
+  def to_db_hash
+    return super.merge(
+        {
+            'text' => @text.join('\n\r')
+        }
+    )
+  end
 end

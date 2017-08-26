@@ -17,4 +17,13 @@ class Link < Post
     time_string = "\n\r========================\n\rCreated at: #{@created_at.strftime('%Y.%m.%d')}\n\r========================"
     return ["Link: #{@url}", "Description: #{@text}", time_string]
   end
+
+  def to_db_hash
+    return super.merge(
+        {
+            'text' => @text,
+            'url' => @url
+        }
+    )
+  end
 end

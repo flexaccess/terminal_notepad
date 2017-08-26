@@ -22,4 +22,13 @@ class Task < Post
 
     return ["Task: " + @text, deadline, time_string]
   end
+
+  def to_db_hash
+    return super.merge(
+                    {
+                        'text' => @text,
+                        'due_date' => @due_date
+                    }
+    )
+  end
 end
