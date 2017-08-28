@@ -23,3 +23,4 @@ id = entry.save_to_db
 
 puts "\n\rPOST IS DONE!"
 puts "ID POST: #{id}"
+ 
