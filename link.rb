@@ -26,4 +26,10 @@ class Link < Post
         }
     )
   end
+
+  def load_data(data_hash) # {'created_at' => '2017.11.29'}
+    super(data_hash)
+    @text = data_hash['text']
+    @url = data_hash['url']
+  end # result this method is var @text @created_at @due_date @url
 end

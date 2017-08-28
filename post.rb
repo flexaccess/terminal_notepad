@@ -12,6 +12,44 @@ class Post
     return post_types[type].new
   end
 
+  def self.finder(limit, type, id)
+
+    db = SQLite3::Database.open(@@SQLITE_DB_FILE)
+
+    if !id.nil?
+      db.results_as_hash = true
+      result = db.execute("SELECT * FROM posts WHERE rowid = ?", id)
+      result = result[0] if result.is_a? Array # pointless?
+      db.close
+
+      if result.nil?
+        abort "Такой ID #{id} не найден"
+      else # there is hash width data post
+        post = create(result['type']) # there is OBJECT class 'type'
+        post.load_data(result)
+        return post
+      end
+      # return table width all post
+    else
+      db.results_as_hash = false
+      query = "SELECT rowid, * FROM posts "
+      query += "WHERE type = :type " if !type.nil?
+      query += "ORDER BY rowid DESC "
+
+      query += "LIMIT :limit " if !limit.nil?
+
+      statement = db.prepare(query)
+      statement.bind_param('type', type) if !type.nil?
+      statement.bind_param('limit', limit) if !limit.nil?
+
+      result = statement.execute!
+      statement.close
+      db.close
+
+      return result
+    end
+  end
+
   def initialize
     @text = nil
     @created_at = Time.now
@@ -55,6 +93,10 @@ class Post
         'type' => self.class.name,
         'created_at' => @created_at.to_s
     }
+  end
+
+  def load_data(data_hash) # {'created_at' => '2017.11.29'}
+    @created_at = Date.parse(data_hash['created_at'])
   end
 
   def file_path

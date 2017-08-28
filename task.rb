@@ -24,11 +24,18 @@ class Task < Post
   end
 
   def to_db_hash
+
     return super.merge(
                     {
                         'text' => @text,
-                        'due_date' => @due_date
+                        'due_date' => @due_date.to_s
                     }
     )
   end
+
+  def load_data(data_hash) # {'created_at' => '2017.11.29'}
+    super(data_hash)
+    @text = data_hash['text']
+    @due_date = Date.parse(data_hash['due_date'])
+  end # result this method is var @text @created_at @due_date @url
 end
